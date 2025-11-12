@@ -25,16 +25,19 @@ const ChatInput = ({ onSendMessage, onUploadPDF, isLoading }: ChatInputProps) =>
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      if (file.type === "application/pdf") {
+      const validTypes = ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+      if (validTypes.includes(file.type)) {
         onUploadPDF(file);
       } else {
         toast({
           title: "Invalid file type",
-          description: "Please upload a PDF file",
+          description: "Please upload a PDF or DOCX file",
           variant: "destructive",
         });
       }
     }
+    // Reset input so same file can be uploaded again
+    e.target.value = '';
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -65,7 +68,7 @@ const ChatInput = ({ onSendMessage, onUploadPDF, isLoading }: ChatInputProps) =>
               <input
                 id="pdf-upload"
                 type="file"
-                accept=".pdf"
+                accept=".pdf,.docx"
                 onChange={handleFileUpload}
                 className="hidden"
               />
@@ -82,7 +85,7 @@ const ChatInput = ({ onSendMessage, onUploadPDF, isLoading }: ChatInputProps) =>
         </div>
         
         <p className="text-xs text-muted-foreground text-center mt-2 max-w-4xl mx-auto">
-          Upload PDFs (resume, portfolio) to help me answer questions about your background
+          Upload PDFs or DOCX files (resume, portfolio) to help me answer questions about your background
         </p>
       </form>
     </div>

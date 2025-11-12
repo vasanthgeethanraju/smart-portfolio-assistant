@@ -5,6 +5,11 @@ import ChatInput from "@/components/ChatInput";
 import { useToast } from "@/components/ui/use-toast";
 import { FileText } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import * as pdfjsLib from 'pdfjs-dist';
+import mammoth from 'mammoth';
+
+// Set up PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
 interface Message {
   role: "user" | "assistant";
@@ -79,23 +84,44 @@ const Index = () => {
     setIsLoading(true);
     
     try {
-      // Read file as text
-      const text = await file.text();
+      let content = '';
       
-      // Simple text extraction - for PDFs with text content
-      let content = text;
-      
-      // If the file is actually a PDF (binary), we'll extract what we can
       if (file.type === 'application/pdf') {
-        // For a simple implementation, we'll just note that it's a PDF
-        // In production, you'd want to use a proper PDF parsing library
-        content = `PDF Document: ${file.name}\n\nNote: This is a placeholder. Upload text files or implement PDF parsing for better results.`;
+        // Parse PDF
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const textContent = await page.getTextContent();
+          const pageText = textContent.items
+            .map((item: any) => item.str)
+            .join(' ');
+          content += pageText + '\n\n';
+        }
+      } else if (file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+        // Parse DOCX
+        const arrayBuffer = await file.arrayBuffer();
+        const result = await mammoth.extractRawText({ arrayBuffer });
+        content = result.value;
+      } else {
+        // Plain text file
+        content = await file.text();
+      }
+
+      if (!content.trim()) {
+        toast({
+          title: "Empty document",
+          description: "The document appears to be empty or couldn't be parsed.",
+          variant: "destructive",
+        });
+        return;
       }
 
       const { data, error } = await supabase.functions.invoke('upload-document', {
         body: { 
           fileName: file.name,
-          content: content
+          content: content.trim()
         }
       });
 
