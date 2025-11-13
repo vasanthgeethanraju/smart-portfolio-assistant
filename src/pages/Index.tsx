@@ -41,25 +41,12 @@ const Index = () => {
     setIsLoading(true);
 
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        toast({
-          title: "Authentication required",
-          description: "Please log in to continue.",
-          variant: "destructive",
-        });
-        return;
-      }
-
       const { data, error } = await supabase.functions.invoke('chat', {
         body: { 
           messages: [...messages, { role: "user", content: message }].map(m => ({
             role: m.role,
             content: m.content
           }))
-        },
-        headers: {
-          Authorization: `Bearer ${session.access_token}`
         }
       });
 
@@ -97,16 +84,6 @@ const Index = () => {
     setIsLoading(true);
     
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        toast({
-          title: "Authentication required",
-          description: "Please log in to continue.",
-          variant: "destructive",
-        });
-        return;
-      }
-
       let content = '';
       
       if (file.type === 'application/pdf') {
@@ -145,9 +122,6 @@ const Index = () => {
         body: { 
           fileName: file.name,
           content: content.trim()
-        },
-        headers: {
-          Authorization: `Bearer ${session.access_token}`
         }
       });
 

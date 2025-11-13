@@ -16,15 +16,6 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // Get auth token from header
-    const authHeader = req.headers.get('Authorization');
-    if (!authHeader) {
-      return new Response(
-        JSON.stringify({ error: 'Missing authorization header' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
     const { fileName, content } = await req.json();
     
     // Input validation
@@ -59,43 +50,20 @@ Deno.serve(async (req) => {
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
-    
-    if (!fileName || !content) {
-      return new Response(
-        JSON.stringify({ error: 'Missing fileName or content' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
 
-    // Initialize Supabase client with user's auth token
+    // Initialize Supabase client
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_ANON_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseKey, {
-      global: {
-        headers: { Authorization: authHeader }
-      }
-    });
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Get authenticated user
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
-    
-    if (authError || !user) {
-      console.error('Auth error:', authError);
-      return new Response(
-        JSON.stringify({ error: 'Unauthorized' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
+    console.log('Document upload attempt');
 
-    console.log('Document upload attempt by user:', user.id);
-
-    // Store document in database with user_id
+    // Store document in database (no user_id required for public access)
     const { data, error } = await supabase
       .from('documents')
       .insert({ 
         file_name: fileName, 
-        content,
-        user_id: user.id 
+        content
       })
       .select()
       .single();
