@@ -5,13 +5,60 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Validation constants
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
+const MAX_CONTENT_LENGTH = 100000; // 100k characters
+const FILENAME_REGEX = /^[a-zA-Z0-9._-]+$/;
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
+    // Get auth token from header
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: 'Missing authorization header' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     const { fileName, content } = await req.json();
+    
+    // Input validation
+    if (!fileName || !content) {
+      return new Response(
+        JSON.stringify({ error: 'Missing fileName or content' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Validate filename format
+    if (!FILENAME_REGEX.test(fileName)) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid filename. Use only alphanumeric characters, dots, hyphens, and underscores.' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Validate content length
+    if (content.length > MAX_CONTENT_LENGTH) {
+      return new Response(
+        JSON.stringify({ error: `Content too large. Maximum ${MAX_CONTENT_LENGTH} characters allowed.` }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Estimate file size (rough approximation)
+    const estimatedSize = new Blob([content]).size;
+    if (estimatedSize > MAX_FILE_SIZE) {
+      return new Response(
+        JSON.stringify({ error: 'File size exceeds 10MB limit' }),
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
     
     if (!fileName || !content) {
       return new Response(
@@ -20,15 +67,36 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Initialize Supabase client
+    // Initialize Supabase client with user's auth token
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseKey);
+    const supabaseKey = Deno.env.get('SUPABASE_ANON_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseKey, {
+      global: {
+        headers: { Authorization: authHeader }
+      }
+    });
 
-    // Store document in database
+    // Get authenticated user
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    
+    if (authError || !user) {
+      console.error('Auth error:', authError);
+      return new Response(
+        JSON.stringify({ error: 'Unauthorized' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    console.log('Document upload attempt by user:', user.id);
+
+    // Store document in database with user_id
     const { data, error } = await supabase
       .from('documents')
-      .insert({ file_name: fileName, content })
+      .insert({ 
+        file_name: fileName, 
+        content,
+        user_id: user.id 
+      })
       .select()
       .single();
 
