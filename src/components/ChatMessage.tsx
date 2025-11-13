@@ -26,7 +26,7 @@ const ChatMessage = ({ role, content }: ChatMessageProps) => {
       
       <div className="flex-1 space-y-2 overflow-hidden">
         <p className="text-sm font-medium text-foreground/80">
-          {isUser ? "You" : "AI Assistant"}
+          {isUser ? "You" : "Vasanth's Assistant"}
         </p>
         <div className="prose prose-sm max-w-none text-foreground/90 leading-relaxed whitespace-pre-wrap">
           {content}

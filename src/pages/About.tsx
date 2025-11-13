@@ -20,11 +20,11 @@ const About = () => {
             <Card className="p-8 shadow-md">
               <div className="flex items-start gap-6">
                 <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-4xl font-bold text-primary-foreground flex-shrink-0">
-                  JD
+                  VG
                 </div>
                 <div className="flex-1">
-                  <h2 className="text-2xl font-bold text-foreground mb-2">John Doe</h2>
-                  <p className="text-accent font-medium mb-4">Full Stack Developer</p>
+                  <h2 className="text-2xl font-bold text-foreground mb-2">Vasanth Geethan Raju</h2>
+                  <p className="text-accent font-medium mb-4">Software Engineer</p>
                   <p className="text-foreground/80 leading-relaxed">
                     Passionate software developer with expertise in building modern web applications. 
                     I specialize in React, TypeScript, and cloud technologies. This AI-powered portfolio 
@@ -58,16 +58,16 @@ const About = () => {
 
             <Card className="p-8 shadow-md">
               <h3 className="text-xl font-bold text-foreground mb-4">Connect With Me</h3>
-              <div className="grid sm:grid-cols-2 gap-4">
+              {/* <div className="grid sm:grid-cols-2 gap-4 ">
                 <a
-                  href="mailto:john@example.com"
+                  href="mailto:vasanthgeethan.raju@gmail.com"
                   className="flex items-center gap-3 p-3 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
                 >
                   <Mail className="w-5 h-5 text-accent" />
-                  <span className="text-foreground">john@example.com</span>
+                  <span className="text-foreground">vasanthgeethan.raju@gmail.com</span>
                 </a>
                 <a
-                  href="https://linkedin.com"
+                  href="https://www.linkedin.com/in/vasanthgeethanraju/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 p-3 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
@@ -76,15 +76,15 @@ const About = () => {
                   <span className="text-foreground">LinkedIn</span>
                 </a>
                 <a
-                  href="https://github.com"
+                  href="http://github.com/vasanthgeethanraju"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 p-3 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
                 >
                   <Github className="w-5 h-5 text-accent" />
                   <span className="text-foreground">GitHub</span>
-                </a>
-                <a
+                </a> */}
+                {/* <a
                   href="https://example.com"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -92,8 +92,44 @@ const About = () => {
                 >
                   <Globe className="w-5 h-5 text-accent" />
                   <span className="text-foreground">Portfolio</span>
-                </a>
-              </div>
+                </a> */}
+              {/* </div> */}
+              <div className="flex flex-col gap-4">
+  {/* First row: 2-column grid */}
+  <div className="grid sm:grid-cols-2 gap-4">
+    <a
+      href="mailto:vasanthgeethan.raju@gmail.com"
+      className="flex items-center gap-3 p-3 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
+    >
+      <Mail className="w-5 h-5 text-accent" />
+      <span className="text-foreground">vasanthgeethan.raju@gmail.com</span>
+    </a>
+
+    <a
+      href="https://www.linkedin.com/in/vasanthgeethanraju/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-3 p-3 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
+    >
+      <Linkedin className="w-5 h-5 text-accent" />
+      <span className="text-foreground">LinkedIn</span>
+    </a>
+  </div>
+
+  {/* Second row: single card centered */}
+  <div className="flex justify-center">
+    <a
+      href="http://github.com/vasanthgeethanraju"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex items-center gap-3 p-3 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors w-80"
+    >
+      <Github className="w-5 h-5 text-accent" />
+      
+      <span className="text-foreground">GitHub</span>
+    </a>
+  </div>
+</div>
             </Card>
           </div>
         </div>

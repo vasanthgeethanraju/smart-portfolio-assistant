@@ -20,7 +20,7 @@ const Index = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Hi! I'm an AI assistant trained on the portfolio owner's resume and documents. Ask me anything about their experience, skills, projects, or background!",
+      content: "Hi! I'm Vasanth's assistant trained on his resume and portfolio. Ask me anything about his experience, skills, projects, or background!",
     },
   ]);
   const [isLoading, setIsLoading] = useState(false);

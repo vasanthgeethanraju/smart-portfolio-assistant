@@ -8,9 +8,9 @@ const Navigation = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">P</span>
+              <span className="text-primary-foreground font-bold text-sm">VG</span>
             </div>
-            <span className="text-lg font-semibold text-foreground">Portfolio AI</span>
+            <span className="text-lg font-semibold text-foreground">Vasanth's Assistant</span>
           </div>
           
           <div className="flex items-center space-x-1">

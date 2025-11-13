@@ -56,7 +56,7 @@ const ChatInput = ({ onSendMessage, onUploadPDF, isLoading }: ChatInputProps) =>
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Ask me anything about my experience, skills, or projects..."
+              placeholder="Ask me anything about Vasanth's experience, skills, or projects..."
               className="min-h-[60px] max-h-[200px] resize-none pr-12 bg-card border-input focus:border-primary transition-colors"
               disabled={isLoading}
             />
@@ -83,10 +83,6 @@ const ChatInput = ({ onSendMessage, onUploadPDF, isLoading }: ChatInputProps) =>
             <Send className="w-5 h-5" />
           </Button>
         </div>
-        
-        <p className="text-xs text-muted-foreground text-center mt-2 max-w-4xl mx-auto">
-          Upload PDFs or DOCX files (resume, portfolio) to help me answer questions about your background
-        </p>
       </form>
     </div>
   );
