@@ -60,7 +60,8 @@ const ChatInput = ({ onSendMessage, onUploadPDF, isLoading }: ChatInputProps) =>
               className="min-h-[60px] max-h-[200px] resize-none pr-12 bg-card border-input focus:border-primary transition-colors"
               disabled={isLoading}
             />
-            <label
+            {/* upload functionality removed for now */}
+            {/* <label
               htmlFor="pdf-upload"
               className="absolute right-3 bottom-3 cursor-pointer text-muted-foreground hover:text-foreground transition-colors"
             >
@@ -72,7 +73,7 @@ const ChatInput = ({ onSendMessage, onUploadPDF, isLoading }: ChatInputProps) =>
                 onChange={handleFileUpload}
                 className="hidden"
               />
-            </label>
+            </label> */}
           </div>
           
           <Button

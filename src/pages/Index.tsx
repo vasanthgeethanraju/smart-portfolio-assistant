@@ -192,7 +192,7 @@ const Index = () => {
                     <div className="w-4 h-4 border-2 border-accent border-t-transparent rounded-full animate-spin" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-sm text-muted-foreground">AI is thinking...</p>
+                    <p className="text-sm text-muted-foreground">Assistant is thinking...</p>
                   </div>
                 </div>
               </div>

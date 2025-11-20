@@ -7,12 +7,12 @@ const Navigation = () => {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">VG</span>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center">
+              <img src="/vg-logo.png" alt="Vasanth Geethan Raju Logo" className="w-8 h-8 rounded-lg object-cover" />
             </div>
             <span className="text-lg font-semibold text-foreground">Vasanth's Assistant</span>
           </div>
-          
+
           <div className="flex items-center space-x-1">
             <NavLink
               to="/"
