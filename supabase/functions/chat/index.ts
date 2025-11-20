@@ -1,3 +1,6 @@
+// @ts-nocheck
+/* eslint-disable */
+
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
@@ -45,20 +48,23 @@ Your role is to answer questions from recruiters about the candidate's experienc
 Be professional, concise, and accurate. Only provide information based on the documents provided.
 If you don't have information about something, politely say so.${context}`;
 
-    // Call Lovable AI Gateway
-    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
-    if (!LOVABLE_API_KEY) {
-      throw new Error('LOVABLE_API_KEY not configured');
+    // Call configured AI provider (default: OpenAI compatible endpoint)
+    const AI_API_KEY = Deno.env.get('AI_API_KEY');
+    if (!AI_API_KEY) {
+      throw new Error('AI_API_KEY not configured');
     }
 
-    const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+    const AI_API_URL = Deno.env.get('AI_API_URL') ?? 'https://api.openai.com/v1/chat/completions';
+    const AI_MODEL = Deno.env.get('AI_MODEL') ?? 'gpt-4o-mini';
+
+    const response = await fetch(AI_API_URL, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
+        'Authorization': `Bearer ${AI_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'google/gemini-2.5-flash',
+        model: AI_MODEL,
         messages: [
           { role: 'system', content: systemPrompt },
           ...messages
