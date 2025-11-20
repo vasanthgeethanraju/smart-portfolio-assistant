@@ -44,7 +44,7 @@ const About = () => {
                   <p className="text-accent font-medium mb-4">Software Engineer at Fortress Information Security</p>
                   <p className="text-foreground/80 leading-relaxed">
                     Software Engineer with 7+ years of experience designing and developing enterprise web applications.
-                    Skilled in React, JavaScript, and MongoDB, with expertise in performance optimization, API integrations, CI/CD, and automated testing using Cypress.
+                    Skilled in React, JavaScript, and MongoDB, with expertise in performance optimization, API integrations, CI/CD, and automated testing using Cypress
                   </p>
                 </div>
               </div>
@@ -54,19 +54,37 @@ const About = () => {
               <h3 className="text-xl font-bold text-foreground mb-4">Skills & Expertise</h3>
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
-                  <h4 className="font-semibold text-foreground mb-2">Frontend</h4>
+                  <h4 className="font-semibold text-foreground mb-2">Languages & Frameworks</h4>
                   <ul className="space-y-1 text-foreground/80">
-                    <li>• React & TypeScript</li>
-                    <li>• Tailwind CSS</li>
-                    <li>• Next.js</li>
+                    <li>• JavaScript</li>
+                    <li>• React</li>
+                    <li>• TypeScript</li>
+                    <li>• Meteor</li>
+                    <li>• HTML/CSS</li>
+                    <li>• Python</li>
+                    <li>• Node.js</li>
+                    <li>• Vite</li>
+                    <li>• Tailwind</li>
+                    <li>• Java</li>
+                    <li>• SQL</li>
+                    <li>• Angular</li>
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-semibold text-foreground mb-2">Backend</h4>
+                  <h4 className="font-semibold text-foreground mb-2">Technical & AI Tools</h4>
                   <ul className="space-y-1 text-foreground/80">
-                    <li>• Node.js</li>
-                    <li>• PostgreSQL</li>
-                    <li>• REST APIs</li>
+                    <li>• Cursor</li>
+                    <li>• MongoDB</li>
+                    <li>• Claude</li>
+                    <li>• ChatGPT</li>
+                    <li>• Jira</li>
+                    <li>• Git</li>
+                    <li>• Studio 3T</li>
+                    <li>• Cypress</li>
+                    <li>• Gemini</li>
+                    <li>• Vim</li>
+                    <li>• VS Code</li>
+                    <li>• Eclipse</li>
                   </ul>
                 </div>
               </div>

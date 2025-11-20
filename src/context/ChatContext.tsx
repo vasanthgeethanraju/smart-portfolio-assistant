@@ -12,6 +12,8 @@ interface ChatContextValue {
   setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
   uploadedFiles: string[];
   setUploadedFiles: React.Dispatch<React.SetStateAction<string[]>>;
+  hasSeenGreeting: boolean;
+  setHasSeenGreeting: React.Dispatch<React.SetStateAction<boolean>>;
   resetChat: () => void;
 }
 
@@ -29,6 +31,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [isLoading, setIsLoading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
+  const [hasSeenGreeting, setHasSeenGreeting] = useState(false);
 
   const resetChat = () => {
     setMessages(initialMessages);
@@ -45,6 +48,8 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
         setIsLoading,
         uploadedFiles,
         setUploadedFiles,
+        hasSeenGreeting,
+        setHasSeenGreeting,
         resetChat,
       }}
     >

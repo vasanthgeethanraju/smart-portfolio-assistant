@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useMemo, useState } from "react";
 import Navigation from "@/components/Navigation";
 import ChatMessage from "@/components/ChatMessage";
 import ChatInput from "@/components/ChatInput";
@@ -8,14 +8,62 @@ import { supabase } from "@/integrations/supabase/client";
 import * as pdfjsLib from 'pdfjs-dist';
 import mammoth from 'mammoth';
 import { useChat } from "@/context/ChatContext";
+import GreetingDialog from "@/components/GreetingDialog";
+
+type GreetingMessage = {
+  greeting: string;
+  greetingIcon: string;
+};
+
+const getGreetingMessage = (): GreetingMessage => {
+  const hour = new Date().getHours();
+
+  if (hour >= 5 && hour < 12) {
+    return { greeting: "Good morning,", greetingIcon: "🌅" };
+  }
+
+  if (hour >= 12 && hour < 18) {
+    return { greeting: "Good afternoon,", greetingIcon: "🌇" };
+  }
+
+  if (hour >= 18 && hour < 21) {
+    return { greeting: "Good evening,", greetingIcon: "🌆" };
+  }
+
+  if (hour >= 21 && hour < 24) {
+    return { greeting: "Good night,", greetingIcon: "🌙" };
+  }
+
+  return { greeting: "Working late?", greetingIcon: "☕" };
+};
 
 // Set up PDF.js worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
 const Index = () => {
-  const { messages, setMessages, isLoading, setIsLoading, uploadedFiles, setUploadedFiles } = useChat();
+  const {
+    messages,
+    setMessages,
+    isLoading,
+    setIsLoading,
+    uploadedFiles,
+    setUploadedFiles,
+    hasSeenGreeting,
+    setHasSeenGreeting,
+  } = useChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const [isGreetingOpen, setIsGreetingOpen] = useState(false);
+  const { greeting, greetingIcon } = useMemo(getGreetingMessage, []);
+
+  useEffect(() => {
+    setIsGreetingOpen(!hasSeenGreeting);
+  }, [hasSeenGreeting]);
+
+  const handleGreetingClose = () => {
+    setHasSeenGreeting(true);
+    setIsGreetingOpen(false);
+  };
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -155,6 +203,12 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navigation />
+      <GreetingDialog
+        open={isGreetingOpen}
+        greeting={greeting}
+        greetingIcon={greetingIcon}
+        onClose={handleGreetingClose}
+      />
       
       <main className="flex-1 flex flex-col pt-16">
         {uploadedFiles.length > 0 && (
