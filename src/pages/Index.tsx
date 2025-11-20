@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import Navigation from "@/components/Navigation";
 import ChatMessage from "@/components/ChatMessage";
 import ChatInput from "@/components/ChatInput";
@@ -7,24 +7,13 @@ import { FileText } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import * as pdfjsLib from 'pdfjs-dist';
 import mammoth from 'mammoth';
+import { useChat } from "@/context/ChatContext";
 
 // Set up PDF.js worker
 pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 
-interface Message {
-  role: "user" | "assistant";
-  content: string;
-}
-
 const Index = () => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      role: "assistant",
-      content: "Hi! I'm Vasanth's assistant trained on his resume and portfolio. Ask me anything about his experience, skills, projects, or background!",
-    },
-  ]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
+  const { messages, setMessages, isLoading, setIsLoading, uploadedFiles, setUploadedFiles } = useChat();
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 

@@ -20,7 +20,11 @@ const ChatMessage = ({ role, content }: ChatMessageProps) => {
               : "bg-chat-assistant text-chat-assistant-foreground border border-border"
           )}
         >
-          {isUser ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
+          {isUser ? <User className="w-4 h-4" /> :   <img
+    src="/vg-logo.png"
+    alt="Assistant avatar"
+    className="w-8 h-8"
+  />}
         </div>
       </div>
 

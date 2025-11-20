@@ -75,7 +75,6 @@ const About = () => {
             <Card className="p-8 shadow-md">
               <h3 className="text-xl font-bold text-foreground mb-4">Connect With Me</h3>
               <div className="flex flex-col gap-4">
-                {/* First row: 2-column grid */}
                 <div className="grid sm:grid-cols-2 gap-4">
                   <a
                     href="http://github.com/vasanthgeethanraju"
