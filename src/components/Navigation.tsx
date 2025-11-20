@@ -1,5 +1,6 @@
 import { NavLink } from "./NavLink";
 import { MessageSquare, User } from "lucide-react";
+import ThemeToggle from "./ThemeToggle";
 
 const Navigation = () => {
   return (
@@ -10,7 +11,7 @@ const Navigation = () => {
             <div className="w-8 h-8 rounded-lg flex items-center justify-center">
               <img src="/vg-logo.png" alt="Vasanth Geethan Raju Logo" className="w-8 h-8 rounded-lg object-cover" />
             </div>
-            <span className="text-lg font-semibold text-foreground">Vasanth's Assistant</span>
+            <span className="text-lg font-semibold text-foreground" onClick={() => window.location.href = "/"} style={{ cursor: "pointer" }}>Vasanth's Assistant</span>
           </div>
 
           <div className="flex items-center space-x-1">
@@ -31,6 +32,7 @@ const Navigation = () => {
               <User className="w-4 h-4" />
               <span>About</span>
             </NavLink>
+            <ThemeToggle />
           </div>
         </div>
       </div>

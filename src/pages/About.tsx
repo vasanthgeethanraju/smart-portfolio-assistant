@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Mail, Linkedin, Github, Globe } from "lucide-react";
+import { Mail, Linkedin, Github, Globe, Phone } from "lucide-react";
 
 const About = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -78,13 +78,14 @@ const About = () => {
                 {/* First row: 2-column grid */}
                 <div className="grid sm:grid-cols-2 gap-4">
                   <a
-                    href="mailto:vasanthgeethan.raju@gmail.com"
+                    href="http://github.com/vasanthgeethanraju"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="flex items-center gap-3 p-3 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
                   >
-                    <Mail className="w-5 h-5 text-accent" />
-                    <span className="text-foreground">vasanthgeethan.raju@gmail.com</span>
+                    <Github className="w-5 h-5 text-accent" />
+                    <span className="text-foreground">GitHub</span>
                   </a>
-
                   <a
                     href="https://www.linkedin.com/in/vasanthgeethanraju/"
                     target="_blank"
@@ -94,19 +95,19 @@ const About = () => {
                     <Linkedin className="w-5 h-5 text-accent" />
                     <span className="text-foreground">LinkedIn</span>
                   </a>
-                </div>
-
-                {/* Second row: single card centered */}
-                <div className="flex justify-center">
                   <a
-                    href="http://github.com/vasanthgeethanraju"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-3 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors w-80"
+                    href="mailto:vasanthgeethan.raju@gmail.com"
+                    className="flex items-center gap-3 p-3 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
                   >
-                    <Github className="w-5 h-5 text-accent" />
-                    
-                    <span className="text-foreground">GitHub</span>
+                    <Mail className="w-5 h-5 text-accent" />
+                    <span className="text-foreground">vasanthgeethan.raju@gmail.com</span>
+                  </a>
+                  <a
+                    href="tel:+14158158752"
+                    className="flex items-center gap-3 p-3 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
+                  >
+                    <Phone className="w-5 h-5 text-accent" />
+                    <span className="text-foreground">(415) 815-8752</span>
                   </a>
                 </div>
               </div>

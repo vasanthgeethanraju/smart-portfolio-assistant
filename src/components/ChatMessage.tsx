@@ -23,7 +23,7 @@ const ChatMessage = ({ role, content }: ChatMessageProps) => {
           {isUser ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
         </div>
       </div>
-      
+
       <div className="flex-1 space-y-2 overflow-hidden">
         <p className="text-sm font-medium text-foreground/80">
           {isUser ? "You" : "Vasanth's Assistant"}
