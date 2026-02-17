@@ -155,19 +155,10 @@ const Index = () => {
         return;
       }
 
-      // Convert file to base64 for storage upload
-      const arrayBufferForStorage = await file.arrayBuffer();
-      const uint8Array = new Uint8Array(arrayBufferForStorage);
-      let binary = '';
-      uint8Array.forEach(byte => { binary += String.fromCharCode(byte); });
-      const fileBase64 = btoa(binary);
-
       const { data, error } = await supabase.functions.invoke('upload-document', {
         body: { 
           fileName: file.name,
-          content: content.trim(),
-          fileBase64,
-          mimeType: file.type,
+          content: content.trim()
         }
       });
 

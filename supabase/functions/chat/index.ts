@@ -32,26 +32,13 @@ Deno.serve(async (req) => {
       throw new Error('Failed to fetch documents');
     }
 
-    // Find the most recent resume document (by created_at)
-    const mostRecentResume = documents && documents.length > 0 ? documents[0] : null;
-
     // Build context from documents
     let context = '';
     if (documents && documents.length > 0) {
       context = '\n\nContext from uploaded documents:\n\n';
       documents.forEach(doc => {
-        context += `--- ${doc.file_name} (uploaded: ${doc.created_at}) ---\n${doc.content}\n\n`;
+        context += `--- ${doc.file_name} ---\n${doc.content}\n\n`;
       });
-    }
-
-    // Include download link info if available
-    let downloadInfo = '';
-    if (mostRecentResume?.file_url) {
-      downloadInfo = `\n\nMost recent resume file: "${mostRecentResume.file_name}" (uploaded ${mostRecentResume.created_at})
-Download URL: ${mostRecentResume.file_url}
-
-IMPORTANT: When anyone asks to download the resume, get the resume, or requests a link to the resume/CV, 
-always respond with a markdown link like this: [Download ${mostRecentResume.file_name}](${mostRecentResume.file_url})`;
     }
 
     // System prompt with document context
@@ -59,7 +46,7 @@ always respond with a markdown link like this: [Download ${mostRecentResume.file
 Your role is to answer questions from recruiters about the candidate's experience, skills, projects, and qualifications.
 
 Be professional, concise, and accurate. Only provide information based on the documents provided.
-If you don't have information about something, politely say so.${context}${downloadInfo}`;
+If you don't have information about something, politely say so.${context}`;
 
     // Call configured AI provider (default: OpenAI compatible endpoint)
     const AI_API_KEY = Deno.env.get('AI_API_KEY');
