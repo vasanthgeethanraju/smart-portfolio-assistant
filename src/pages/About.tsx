@@ -43,8 +43,10 @@ const About = () => {
                   <h2 className="text-2xl font-bold text-foreground mb-2">Vasanth Geethan Raju</h2>
                   <p className="text-accent font-medium mb-4">Software Engineer at Fortress Information Security</p>
                   <p className="text-foreground/80 leading-relaxed">
-                    Software Engineer with 7+ years of experience designing and developing enterprise web applications.
-                    Skilled in React, JavaScript, and MongoDB, with expertise in performance optimization, API integrations, CI/CD, and automated testing using Cypress
+                  Software Engineer with 7+ years of experience building scalable, customer-focused products. I thrive in rapidly evolving
+                  environments where I take ownership, turn complex problems into clear solutions, and ship software that meaningfully improves
+                  people's lives. Grounded in full-stack and automation experience, I build with a deep respect for quality, reliability, and long-term
+                  impact of the product for customers.
                   </p>
                 </div>
               </div>
