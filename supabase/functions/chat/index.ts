@@ -48,23 +48,20 @@ Your role is to answer questions from recruiters about the candidate's experienc
 Be professional, concise, and accurate. Only provide information based on the documents provided.
 If you don't have information about something, politely say so.${context}`;
 
-    // Call configured AI provider (default: OpenAI compatible endpoint)
-    const AI_API_KEY = Deno.env.get('AI_API_KEY');
-    if (!AI_API_KEY) {
-      throw new Error('AI_API_KEY not configured');
+    // Call Lovable AI (OpenAI-compatible endpoint)
+    const LOVABLE_API_KEY = Deno.env.get('LOVABLE_API_KEY');
+    if (!LOVABLE_API_KEY) {
+      throw new Error('LOVABLE_API_KEY not configured');
     }
 
-    const AI_API_URL = Deno.env.get('AI_API_URL') ?? 'https://api.openai.com/v1/chat/completions';
-    const AI_MODEL = Deno.env.get('AI_MODEL') ?? 'gpt-4o-mini';
-
-    const response = await fetch(AI_API_URL, {
+    const response = await fetch('https://api.lovable.dev/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${AI_API_KEY}`,
+        'Authorization': `Bearer ${LOVABLE_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: AI_MODEL,
+        model: 'google/gemini-2.5-flash',
         messages: [
           { role: 'system', content: systemPrompt },
           ...messages
