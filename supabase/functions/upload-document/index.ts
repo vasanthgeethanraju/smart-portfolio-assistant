@@ -6,9 +6,8 @@ const corsHeaders = {
 };
 
 // Validation constants
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB in bytes
 const MAX_CONTENT_LENGTH = 100000; // 100k characters
-const FILENAME_REGEX = /^[a-zA-Z0-9._-]+$/;
+const FILENAME_REGEX = /^[a-zA-Z0-9._\-\s]+$/;
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -16,20 +15,13 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { fileName, content } = await req.json();
+    const body = await req.json();
+    const { fileName, content, fileBase64, mimeType } = body;
     
     // Input validation
     if (!fileName || !content) {
       return new Response(
         JSON.stringify({ error: 'Missing fileName or content' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
-    }
-
-    // Validate filename format
-    if (!FILENAME_REGEX.test(fileName)) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid filename. Use only alphanumeric characters, dots, hyphens, and underscores.' }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
@@ -42,28 +34,44 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Estimate file size (rough approximation)
-    const estimatedSize = new Blob([content]).size;
-    if (estimatedSize > MAX_FILE_SIZE) {
-      return new Response(
-        JSON.stringify({ error: 'File size exceeds 10MB limit' }),
-        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
+    // Initialize Supabase client with service role to bypass RLS for storage
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    let fileUrl: string | null = null;
+
+    // Upload the actual file to storage if provided
+    if (fileBase64 && mimeType) {
+      const fileBytes = Uint8Array.from(atob(fileBase64), c => c.charCodeAt(0));
+      const timestamp = Date.now();
+      const sanitizedName = fileName.replace(/[^a-zA-Z0-9._\-]/g, '_');
+      const storagePath = `${timestamp}_${sanitizedName}`;
+
+      const { data: storageData, error: storageError } = await supabase.storage
+        .from('documents')
+        .upload(storagePath, fileBytes, {
+          contentType: mimeType,
+          upsert: false,
+        });
+
+      if (storageError) {
+        console.error('Storage error:', storageError);
+      } else {
+        const { data: urlData } = supabase.storage
+          .from('documents')
+          .getPublicUrl(storageData.path);
+        fileUrl = urlData.publicUrl;
+      }
     }
 
-    // Initialize Supabase client
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseKey = Deno.env.get('SUPABASE_ANON_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseKey);
-
-    console.log('Document upload attempt');
-
-    // Store document in database (no user_id required for public access)
+    // Store document in database
     const { data, error } = await supabase
       .from('documents')
       .insert({ 
         file_name: fileName, 
-        content
+        content,
+        file_url: fileUrl,
       })
       .select()
       .single();
@@ -79,7 +87,8 @@ Deno.serve(async (req) => {
       JSON.stringify({ 
         success: true, 
         message: 'Document uploaded and processed successfully',
-        documentId: data.id 
+        documentId: data.id,
+        fileUrl,
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );

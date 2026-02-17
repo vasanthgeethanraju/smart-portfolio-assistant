@@ -19,6 +19,7 @@ export type Database = {
           content: string
           created_at: string
           file_name: string
+          file_url: string | null
           id: string
           user_id: string | null
         }
@@ -26,6 +27,7 @@ export type Database = {
           content: string
           created_at?: string
           file_name: string
+          file_url?: string | null
           id?: string
           user_id?: string | null
         }
@@ -33,6 +35,7 @@ export type Database = {
           content?: string
           created_at?: string
           file_name?: string
+          file_url?: string | null
           id?: string
           user_id?: string | null
         }
