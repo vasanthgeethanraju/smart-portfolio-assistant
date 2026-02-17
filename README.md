@@ -13,7 +13,7 @@ The goal of this project is to make my profile more engaging and conversational,
 - **Vite** + **React** + **TypeScript**
 - **Tailwind CSS** + **shadcn-ui** for modern UI components
 - **Supabase** for backend integrations and chat-related functionality
-- **OpenAI-compatible LLM** (configure via `AI_API_URL`, `AI_API_KEY`, and `AI_MODEL`)
+- **OpenAI-compatible LLM** 
 
 ### Purpose
 
