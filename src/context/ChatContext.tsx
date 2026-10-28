@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 
 export interface ChatMessage {
   role: "user" | "assistant";
@@ -25,13 +25,32 @@ const initialMessages: ChatMessage[] = [
   },
 ];
 
+const GREETING_STORAGE_KEY = "hasSeenGreeting";
+
+// localStorage can throw in private mode or when storage is blocked, so fall back to "not seen"
+const loadHasSeenGreeting = () => {
+  try {
+    return localStorage.getItem(GREETING_STORAGE_KEY) === "true";
+  } catch {
+    return false;
+  }
+};
+
 const ChatContext = createContext<ChatContextValue | undefined>(undefined);
 
 export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [isLoading, setIsLoading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<string[]>([]);
-  const [hasSeenGreeting, setHasSeenGreeting] = useState(false);
+  const [hasSeenGreeting, setHasSeenGreeting] = useState(loadHasSeenGreeting);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(GREETING_STORAGE_KEY, String(hasSeenGreeting));
+    } catch {
+      // Storage unavailable; the greeting will just show again next visit
+    }
+  }, [hasSeenGreeting]);
 
   const resetChat = () => {
     setMessages(initialMessages);

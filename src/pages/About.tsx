@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Mail, Linkedin, Github, Globe, Phone, GraduationCap, Download } from "lucide-react";
+import { Mail, Linkedin, Github, Globe, GraduationCap, Download } from "lucide-react";
 
 const education = [
   {
@@ -128,7 +128,7 @@ const About = () => {
               <div className="flex flex-col gap-4">
                 <div className="grid sm:grid-cols-2 gap-4">
                   <a
-                    href="http://github.com/vasanthgeethanraju"
+                    href="https://github.com/vasanthgeethanraju"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 p-3 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
@@ -151,13 +151,6 @@ const About = () => {
                   >
                     <Mail className="w-5 h-5 text-accent" />
                     <span className="text-foreground">vasanthgeethan.raju@gmail.com</span>
-                  </a>
-                  <a
-                    href="tel:+14158158752"
-                    className="flex items-center gap-3 p-3 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
-                  >
-                    <Phone className="w-5 h-5 text-accent" />
-                    <span className="text-foreground">(415) 815-8752</span>
                   </a>
                   <a
                     href="/resume.pdf"

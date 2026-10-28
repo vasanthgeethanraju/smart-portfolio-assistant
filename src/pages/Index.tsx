@@ -13,6 +13,13 @@ import GreetingDialog from "@/components/GreetingDialog";
 import UploadPasswordDialog from "@/components/UploadPasswordDialog";
 import { FunctionsHttpError } from "@supabase/supabase-js";
 
+const suggestedQuestions = [
+  "Summarize his background",
+  "What has he built with AI?",
+  "What's his experience with React and TypeScript?",
+  "What projects is he working on?",
+];
+
 type GreetingMessage = {
   greeting: string;
   greetingIcon: string;
@@ -259,6 +266,22 @@ const Index = () => {
             {messages.map((message, index) => (
               <ChatMessage key={index} role={message.role} content={message.content} />
             ))}
+            {messages.length === 1 && !isLoading && (
+              <div className="px-4 sm:px-6 pb-6">
+                <div className="pl-11 flex flex-wrap gap-2">
+                  {suggestedQuestions.map((question) => (
+                    <button
+                      key={question}
+                      type="button"
+                      onClick={() => handleSendMessage(question)}
+                      className="text-sm px-3 py-1.5 rounded-full border border-border bg-secondary/50 text-foreground/80 hover:bg-secondary hover:text-foreground transition-colors"
+                    >
+                      {question}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
             {isLoading && (
               <div className="py-6 px-4 sm:px-6">
                 <div className="flex gap-3">

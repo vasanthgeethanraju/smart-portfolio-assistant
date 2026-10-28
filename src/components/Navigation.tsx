@@ -12,13 +12,16 @@ const Navigation = () => {
               <img src="/vg-logo.png" alt="Vasanth Geethan Raju Logo" className="w-8 h-8 rounded-lg object-cover" />
             </div>
             {/* <span className="text-lg font-semibold text-foreground" onClick={() => window.location.href = "/"} style={{ cursor: "pointer" }}>Vasanth's Assistant</span> */}
-            <span className="text-lg font-semibold text-foreground">Vasanth's Assistant</span>
+            <span className="text-lg font-semibold text-foreground">
+              <span className="sm:hidden">Vasanth</span>
+              <span className="hidden sm:inline">Vasanth Geethan Raju</span>
+            </span>
           </div>
 
           <div className="flex items-center space-x-1">
             <NavLink
               to="/"
-              className="flex items-center space-x-2 px-4 py-2 rounded-lg text-foreground/70 hover:text-foreground hover:bg-secondary/50 transition-all duration-200"
+              className="flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-lg text-foreground/70 hover:text-foreground hover:bg-secondary/50 transition-all duration-200"
               activeClassName="bg-secondary text-foreground font-medium"
             >
               <MessageSquare className="w-4 h-4" />
@@ -27,7 +30,7 @@ const Navigation = () => {
             
             <NavLink
               to="/about"
-              className="flex items-center space-x-2 px-4 py-2 rounded-lg text-foreground/70 hover:text-foreground hover:bg-secondary/50 transition-all duration-200"
+              className="flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-lg text-foreground/70 hover:text-foreground hover:bg-secondary/50 transition-all duration-200"
               activeClassName="bg-secondary text-foreground font-medium"
             >
               <User className="w-4 h-4" />
@@ -36,7 +39,7 @@ const Navigation = () => {
 
             <NavLink
               to="/projects"
-              className="flex items-center space-x-2 px-4 py-2 rounded-lg text-foreground/70 hover:text-foreground hover:bg-secondary/50 transition-all duration-200"
+              className="flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-lg text-foreground/70 hover:text-foreground hover:bg-secondary/50 transition-all duration-200"
               activeClassName="bg-secondary text-foreground font-medium"
             >
               <FolderGit2 className="w-4 h-4" />
@@ -46,7 +49,7 @@ const Navigation = () => {
             <a
               href="/resume.pdf"
               download="Vasanth_Geethan_Raju_Resume.pdf"
-              className="flex items-center space-x-2 px-4 py-2 rounded-lg text-foreground/70 hover:text-foreground hover:bg-secondary/50 transition-all duration-200"
+              className="flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-lg text-foreground/70 hover:text-foreground hover:bg-secondary/50 transition-all duration-200"
               aria-label="Download resume"
             >
               <Download className="w-4 h-4" />
