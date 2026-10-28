@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Mail, Linkedin, Github, Globe, Phone, GraduationCap } from "lucide-react";
+import { Mail, Linkedin, Github, Globe, Phone, GraduationCap, Download } from "lucide-react";
 
 const education = [
   {
@@ -158,6 +158,14 @@ const About = () => {
                   >
                     <Phone className="w-5 h-5 text-accent" />
                     <span className="text-foreground">(415) 815-8752</span>
+                  </a>
+                  <a
+                    href="/resume.pdf"
+                    download="Vasanth_Geethan_Raju_Resume.pdf"
+                    className="flex items-center gap-3 p-3 rounded-lg bg-secondary hover:bg-secondary/80 transition-colors"
+                  >
+                    <Download className="w-5 h-5 text-accent" />
+                    <span className="text-foreground">Download resume (PDF)</span>
                   </a>
                 </div>
               </div>

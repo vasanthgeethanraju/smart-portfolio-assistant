@@ -1,5 +1,5 @@
 import { NavLink } from "./NavLink";
-import { MessageSquare, User, FolderGit2 } from "lucide-react";
+import { MessageSquare, User, FolderGit2, Download } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 
 const Navigation = () => {
@@ -42,6 +42,16 @@ const Navigation = () => {
               <FolderGit2 className="w-4 h-4" />
               <span className="hidden sm:inline">Projects</span>
             </NavLink>
+
+            <a
+              href="/resume.pdf"
+              download="Vasanth_Geethan_Raju_Resume.pdf"
+              className="flex items-center space-x-2 px-4 py-2 rounded-lg text-foreground/70 hover:text-foreground hover:bg-secondary/50 transition-all duration-200"
+              aria-label="Download resume"
+            >
+              <Download className="w-4 h-4" />
+              <span className="hidden sm:inline">Resume</span>
+            </a>
             <ThemeToggle />
           </div>
         </div>
