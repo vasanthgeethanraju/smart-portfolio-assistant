@@ -1,15 +1,19 @@
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
-import { Send } from "lucide-react";
+import { Send, Upload } from "lucide-react";
+import { useToast } from "./ui/use-toast";
 
 interface ChatInputProps {
   onSendMessage: (message: string) => void;
+  onUploadPDF: (file: File) => void;
   isLoading: boolean;
+  showUpload?: boolean;
 }
 
-const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
+const ChatInput = ({ onSendMessage, onUploadPDF, isLoading, showUpload = false }: ChatInputProps) => {
   const [message, setMessage] = useState("");
+  const { toast } = useToast();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,6 +21,24 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
       onSendMessage(message);
       setMessage("");
     }
+  };
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const validTypes = ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+      if (validTypes.includes(file.type)) {
+        onUploadPDF(file);
+      } else {
+        toast({
+          title: "Invalid file type",
+          description: "Please upload a PDF or DOCX file",
+          variant: "destructive",
+        });
+      }
+    }
+    // Reset input so same file can be uploaded again
+    e.target.value = '';
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -39,6 +61,21 @@ const ChatInput = ({ onSendMessage, isLoading }: ChatInputProps) => {
               className="min-h-[60px] max-h-[200px] resize-none pr-12 bg-card border-input focus:border-primary transition-colors"
               disabled={isLoading}
             />
+            {showUpload && (
+              <label
+                htmlFor="pdf-upload"
+                className="absolute right-3 bottom-3 cursor-pointer text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Upload className="w-5 h-5" />
+                <input
+                  id="pdf-upload"
+                  type="file"
+                  accept=".pdf,.docx"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                />
+              </label>
+            )}
           </div>
           
           <Button

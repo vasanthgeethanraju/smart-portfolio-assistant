@@ -5,8 +5,13 @@ import ChatInput from "@/components/ChatInput";
 import { useToast } from "@/components/ui/use-toast";
 import { FileText } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import * as pdfjsLib from 'pdfjs-dist';
+import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
+import mammoth from 'mammoth';
 import { useChat } from "@/context/ChatContext";
 import GreetingDialog from "@/components/GreetingDialog";
+import UploadPasswordDialog from "@/components/UploadPasswordDialog";
+import { FunctionsHttpError } from "@supabase/supabase-js";
 
 type GreetingMessage = {
   greeting: string;
@@ -35,6 +40,9 @@ const getGreetingMessage = (): GreetingMessage => {
   return { greeting: "Working late?", greetingIcon: "☕" };
 };
 
+// Set up PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
+
 const Index = () => {
   const {
     messages,
@@ -42,6 +50,7 @@ const Index = () => {
     isLoading,
     setIsLoading,
     uploadedFiles,
+    setUploadedFiles,
     hasSeenGreeting,
     setHasSeenGreeting,
   } = useChat();
@@ -49,6 +58,9 @@ const Index = () => {
   const { toast } = useToast();
   const [isGreetingOpen, setIsGreetingOpen] = useState(false);
   const { greeting, greetingIcon } = useMemo(getGreetingMessage, []);
+  // Upload button only shows when the URL has ?admin; the server still checks the password
+  const isAdmin = useMemo(() => new URLSearchParams(window.location.search).has("admin"), []);
+  const [pendingUpload, setPendingUpload] = useState<File | null>(null);
 
   useEffect(() => {
     setIsGreetingOpen(!hasSeenGreeting);
@@ -111,6 +123,109 @@ const Index = () => {
     }
   };
 
+  const handleUploadPDF = (file: File) => {
+    setPendingUpload(file);
+  };
+
+  const handleUploadPasswordSubmit = (password: string) => {
+    if (pendingUpload) uploadDocument(pendingUpload, password);
+    setPendingUpload(null);
+  };
+
+  const uploadDocument = async (file: File, password: string) => {
+    setIsLoading(true);
+    
+    try {
+      let content = '';
+      
+      if (file.type === 'application/pdf') {
+        // Parse PDF
+        const arrayBuffer = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        
+        for (let i = 1; i <= pdf.numPages; i++) {
+          const page = await pdf.getPage(i);
+          const textContent = await page.getTextContent();
+          const pageText = textContent.items
+            .map((item: any) => item.str)
+            .join(' ');
+          content += pageText + '\n\n';
+        }
+      } else if (file.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+        // Parse DOCX
+        const arrayBuffer = await file.arrayBuffer();
+        const result = await mammoth.extractRawText({ arrayBuffer });
+        content = result.value;
+      } else {
+        // Plain text file
+        content = await file.text();
+      }
+
+      if (!content.trim()) {
+        toast({
+          title: "Empty document",
+          description: "The document appears to be empty or couldn't be parsed.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const { data, error } = await supabase.functions.invoke('upload-document', {
+        body: { 
+          fileName: file.name,
+          content: content.trim()
+        },
+        headers: { 'x-upload-password': password },
+      });
+
+      if (error instanceof FunctionsHttpError) {
+        const body = await error.context.json().catch(() => null);
+        toast({
+          title: "Upload failed",
+          description: body?.error ?? "Failed to upload file. Please try again.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (error) throw error;
+
+      if (data?.error) {
+        toast({
+          title: "Upload failed",
+          description: data.error,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      setUploadedFiles((prev) => [...prev, file.name]);
+      
+      toast({
+        title: "Success",
+        description: `${file.name} uploaded successfully! I can now answer questions about it.`,
+      });
+
+      // Add a system message to acknowledge the upload
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: `Great! I've processed ${file.name}. You can now ask me questions about the information in this document.`,
+        },
+      ]);
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast({
+        title: "Upload failed",
+        description: "Failed to upload file. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <Navigation />
@@ -119,6 +234,11 @@ const Index = () => {
         greeting={greeting}
         greetingIcon={greetingIcon}
         onClose={handleGreetingClose}
+      />
+      <UploadPasswordDialog
+        fileName={pendingUpload?.name ?? null}
+        onCancel={() => setPendingUpload(null)}
+        onSubmit={handleUploadPasswordSubmit}
       />
       
       <main className="flex-1 flex flex-col pt-16">
@@ -157,6 +277,8 @@ const Index = () => {
 
         <ChatInput
           onSendMessage={handleSendMessage}
+          onUploadPDF={handleUploadPDF}
+          showUpload={isAdmin}
           isLoading={isLoading}
         />
       </main>
