@@ -1,4 +1,6 @@
-import { Bot, User } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ChatMessageProps {
@@ -32,9 +34,22 @@ const ChatMessage = ({ role, content }: ChatMessageProps) => {
         <p className="text-sm font-medium text-foreground/80">
           {isUser ? "You" : "Vasanth's Assistant"}
         </p>
-        <div className="prose prose-sm max-w-none text-foreground/90 leading-relaxed whitespace-pre-wrap">
-          {content}
-        </div>
+        {isUser ? (
+          <div className="text-sm text-foreground/90 leading-relaxed whitespace-pre-wrap">
+            {content}
+          </div>
+        ) : (
+          <div className="prose prose-sm dark:prose-invert max-w-none text-foreground/90 leading-relaxed prose-headings:text-foreground prose-strong:text-foreground prose-a:text-primary">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              components={{
+                a: ({ node, ...props }) => <a {...props} target="_blank" rel="noopener noreferrer" />,
+              }}
+            >
+              {content}
+            </ReactMarkdown>
+          </div>
+        )}
       </div>
     </div>
   );
