@@ -1,5 +1,5 @@
 import { NavLink } from "./NavLink";
-import { MessageSquare, User } from "lucide-react";
+import { MessageSquare, User, FolderGit2 } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 
 const Navigation = () => {
@@ -22,7 +22,7 @@ const Navigation = () => {
               activeClassName="bg-secondary text-foreground font-medium"
             >
               <MessageSquare className="w-4 h-4" />
-              <span>Chat</span>
+              <span className="hidden sm:inline">Chat</span>
             </NavLink>
             
             <NavLink
@@ -31,7 +31,16 @@ const Navigation = () => {
               activeClassName="bg-secondary text-foreground font-medium"
             >
               <User className="w-4 h-4" />
-              <span>About</span>
+              <span className="hidden sm:inline">About</span>
+            </NavLink>
+
+            <NavLink
+              to="/projects"
+              className="flex items-center space-x-2 px-4 py-2 rounded-lg text-foreground/70 hover:text-foreground hover:bg-secondary/50 transition-all duration-200"
+              activeClassName="bg-secondary text-foreground font-medium"
+            >
+              <FolderGit2 className="w-4 h-4" />
+              <span className="hidden sm:inline">Projects</span>
             </NavLink>
             <ThemeToggle />
           </div>

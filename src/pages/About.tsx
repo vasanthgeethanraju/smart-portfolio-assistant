@@ -6,7 +6,44 @@ import {
   DialogContent,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Mail, Linkedin, Github, Globe, Phone } from "lucide-react";
+import { Mail, Linkedin, Github, Globe, Phone, GraduationCap } from "lucide-react";
+
+const education = [
+  {
+    degree: "Master of Science in Artificial Intelligence",
+    school: "Indiana Wesleyan University · Hybrid",
+    date: "Expected May 2028",
+  },
+  {
+    degree: "Master of Science in Computer Science",
+    school: "Boise State University, Boise, ID",
+    date: "May 2020",
+  },
+  {
+    degree: "Bachelor of Engineering in Computer Science and Engineering",
+    school: "Anna University, Chennai, India",
+    date: "May 2015",
+  },
+];
+
+const skillGroups = [
+  {
+    title: "Languages & Frameworks",
+    skills: ["JavaScript", "TypeScript", "React", "Node.js", "Meteor", "HTML/CSS", "Tailwind", "Vite", "Python", "Java", "SQL", "Angular"],
+  },
+  {
+    title: "Backend & Data",
+    skills: ["MongoDB & aggregation pipelines", "Supabase & edge functions", "RBAC workflow systems"],
+  },
+  {
+    title: "Testing & DevOps",
+    skills: ["Playwright", "Cypress", "CI/CD", "Git"],
+  },
+  {
+    title: "AI & Tools",
+    skills: ["LLM integration", "Claude", "Cursor", "VS Code", "Jira"],
+  },
+];
 
 const About = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -41,7 +78,7 @@ const About = () => {
                 </Dialog>
                 <div className="flex-1">
                   <h2 className="text-2xl font-bold text-foreground mb-2">Vasanth Geethan Raju</h2>
-                  <p className="text-accent font-medium mb-4">Software Engineer at Fortress Information Security</p>
+                  <p className="text-accent font-medium mb-4">Full-Stack Software Engineer · React/TypeScript · AI/LLM tooling</p>
                   <p className="text-foreground/80 leading-relaxed">
                   Software Engineer with 7+ years of experience building scalable, customer-focused products. I thrive in rapidly evolving
                   environments where I take ownership, turn complex problems into clear solutions, and ship software that meaningfully improves
@@ -53,42 +90,36 @@ const About = () => {
             </Card>
 
             <Card className="p-8 shadow-md">
+              <h3 className="text-xl font-bold text-foreground mb-4">Education</h3>
+              <ul className="space-y-4">
+                {education.map((item) => (
+                  <li key={item.degree} className="flex items-start gap-3">
+                    <GraduationCap className="w-5 h-5 text-accent mt-0.5 flex-shrink-0" />
+                    <div className="flex-1">
+                      <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
+                        <p className="font-semibold text-foreground">{item.degree}</p>
+                        <p className="text-sm text-muted-foreground sm:text-right">{item.date}</p>
+                      </div>
+                      <p className="text-foreground/80">{item.school}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </Card>
+
+            <Card className="p-8 shadow-md">
               <h3 className="text-xl font-bold text-foreground mb-4">Skills & Expertise</h3>
-              <div className="grid sm:grid-cols-2 gap-4">
-                <div>
-                  <h4 className="font-semibold text-foreground mb-2">Languages & Frameworks</h4>
-                  <ul className="space-y-1 text-foreground/80">
-                    <li>• JavaScript</li>
-                    <li>• React</li>
-                    <li>• TypeScript</li>
-                    <li>• Meteor</li>
-                    <li>• HTML/CSS</li>
-                    <li>• Python</li>
-                    <li>• Node.js</li>
-                    <li>• Vite</li>
-                    <li>• Tailwind</li>
-                    <li>• Java</li>
-                    <li>• SQL</li>
-                    <li>• Angular</li>
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold text-foreground mb-2">Technical & AI Tools</h4>
-                  <ul className="space-y-1 text-foreground/80">
-                    <li>• Cursor</li>
-                    <li>• MongoDB</li>
-                    <li>• Claude</li>
-                    <li>• ChatGPT</li>
-                    <li>• Jira</li>
-                    <li>• Git</li>
-                    <li>• Studio 3T</li>
-                    <li>• Cypress</li>
-                    <li>• Gemini</li>
-                    <li>• Vim</li>
-                    <li>• VS Code</li>
-                    <li>• Eclipse</li>
-                  </ul>
-                </div>
+              <div className="grid sm:grid-cols-2 gap-6">
+                {skillGroups.map((group) => (
+                  <div key={group.title}>
+                    <h4 className="font-semibold text-foreground mb-2">{group.title}</h4>
+                    <ul className="space-y-1 text-foreground/80">
+                      {group.skills.map((skill) => (
+                        <li key={skill}>• {skill}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
               </div>
             </Card>
 
