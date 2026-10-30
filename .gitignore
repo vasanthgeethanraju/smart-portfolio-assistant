@@ -117,3 +117,6 @@ supabase/.temp
 *.tmp
 *.temp
 .cache
+
+# Personal notes
+ideas.md
