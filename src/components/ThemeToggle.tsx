@@ -37,7 +37,7 @@ const ThemeToggle = () => {
       type="button"
       onClick={() => setTheme(nextMode)}
       className={cn(
-        "ml-2 inline-flex items-center gap-2 rounded-full px-4 py-2",
+        "ml-2 inline-flex items-center gap-2 rounded-full px-2 sm:px-4 py-2",
         "bg-secondary/60 text-foreground/70 hover:text-foreground hover:bg-secondary/80 transition-all",
         "border border-border/60"
       )}
