@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   ArrowDown, ArrowUpRight, BookOpen, Download, FileSliders,
@@ -9,37 +9,10 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { timelineArtifact } from "@/content/ai-ml-portfolio";
-
-const sections = [
-  ["professional-bio", "Professional Bio"],
-  ["personal-value", "Personal Value Proposition"],
-  ["artifact-1", "Artifact 1"],
-  ["introduction", "Introduction"],
-  ["description", "Description & Audience"],
-  ["objective", "Objective"],
-  ["process", "Process"],
-  ["tools", "Tools and Technologies"],
-  ["value-proposition", "Value Proposition"],
-  ["references", "References"],
-  ["actual-artifact", "The Actual Artifact"],
-] as const;
-
-function ArtifactSection({ id, title, icon, children }: {
-  id: string;
-  title: string;
-  icon: ReactNode;
-  children: ReactNode;
-}) {
-  return (
-    <section id={id} aria-labelledby={`${id}-heading`} className="scroll-mt-24 border-t border-border py-7 first:border-t-0 first:pt-0 last:pb-0">
-      <h3 id={`${id}-heading`} className="mb-3 flex items-center gap-3 text-lg font-semibold text-foreground">
-        <span aria-hidden="true" className="text-accent">{icon}</span>
-        {title}
-      </h3>
-      <div className="space-y-3 text-foreground/80 leading-relaxed">{children}</div>
-    </section>
-  );
-}
+import { portfolioArtifacts } from "@/content/portfolio-artifacts";
+import { ArtifactSection } from "@/components/portfolio/ArtifactSection";
+import { AILabArtifact } from "@/components/portfolio/AILabArtifact";
+import { PortfolioContents } from "@/components/portfolio/PortfolioContents";
 
 const AIMLPortfolio = () => {
   const { presentation, process, references } = timelineArtifact;
@@ -47,8 +20,15 @@ const AIMLPortfolio = () => {
   useEffect(() => {
     const previousTitle = document.title;
     document.title = "AI/ML Learning Portfolio | Vasanth Geethan Raju";
-    window.scrollTo(0, 0);
-    return () => { document.title = previousTitle; };
+    const frame = window.requestAnimationFrame(() => {
+      const target = document.getElementById(window.location.hash.slice(1));
+      if (target) target.scrollIntoView();
+      else window.scrollTo(0, 0);
+    });
+    return () => {
+      document.title = previousTitle;
+      window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   return (
@@ -68,7 +48,7 @@ const AIMLPortfolio = () => {
               Connecting my software engineering experience with what I’m learning
               in artificial intelligence and machine learning, one artifact at a time.
             </p>
-            <a href="#artifact-1" className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-accent underline-offset-4 hover:underline">
+            <a href="#coursework" className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-accent underline-offset-4 hover:underline">
               Explore my coursework <ArrowDown aria-hidden="true" className="h-4 w-4" />
             </a>
           </header>
@@ -111,6 +91,32 @@ const AIMLPortfolio = () => {
                   </p>
                 </section>
               </Card>
+
+              <section id="coursework" aria-labelledby="coursework-heading" className="scroll-mt-24 py-2">
+                <div className="flex flex-wrap items-baseline justify-between gap-2 mb-4">
+                  <h2 id="coursework-heading" className="text-xl font-bold">Coursework & Artifacts</h2>
+                  <span className="text-sm text-foreground/65">{portfolioArtifacts.length} artifacts · AIML-500</span>
+                </div>
+                <p className="text-foreground/75 leading-relaxed mb-5">
+                  From understanding how AI evolved to building and evaluating a
+                  practical assistant. Each artifact includes its original coursework
+                  and the thinking behind it.
+                </p>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  {portfolioArtifacts.map((artifact) => (
+                    <a key={artifact.id} href={`#${artifact.id}`} className="group flex flex-col rounded-lg border border-border bg-card p-5 shadow-sm transition-colors hover:border-accent/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent">
+                      <div className="flex items-center justify-between gap-2 mb-3">
+                        <span className="text-xs font-semibold text-accent">ARTIFACT {artifact.number}</span>
+                        <ArrowUpRight aria-hidden="true" className="w-4 h-4 text-accent" />
+                      </div>
+                      <h3 className="text-lg font-semibold leading-snug">{artifact.shortTitle}</h3>
+                      <p className="mt-2 text-sm text-foreground/75 leading-relaxed">{artifact.summary}</p>
+                      <p className="mt-4 pt-4 border-t border-border text-xs text-foreground/65">{artifact.format}</p>
+                      <p className="mt-3 text-sm font-medium text-accent group-hover:underline underline-offset-4">Explore Artifact {artifact.number}</p>
+                    </a>
+                  ))}
+                </div>
+              </section>
 
               <article id="artifact-1" aria-labelledby="artifact-heading" className="scroll-mt-24">
                 <Card className="overflow-hidden shadow-md">
@@ -252,41 +258,14 @@ const AIMLPortfolio = () => {
                   </div>
                 </Card>
               </article>
+              <AILabArtifact />
               <p className="text-sm text-foreground/70">
                 Explore how I apply my engineering skills in my{" "}
                 <Link to="/projects" className="text-accent underline underline-offset-4">personal projects</Link>.
               </p>
             </div>
 
-            <aside aria-label="Portfolio navigation and artifact summary" className="space-y-5 lg:sticky lg:top-24">
-              <Card className="p-5">
-                <nav aria-label="On this page">
-                  <h2 className="font-semibold mb-3">On This Page</h2>
-                  <ol className="space-y-1">
-                    {sections.map(([id, label]) => (
-                      <li key={id}>
-                        <a href={`#${id}`} className="block rounded-md px-3 py-2 text-sm text-foreground/75 hover:text-foreground hover:bg-secondary transition-colors">
-                          {label}
-                        </a>
-                      </li>
-                    ))}
-                  </ol>
-                </nav>
-              </Card>
-              <Card className="p-5">
-                <h2 className="font-semibold mb-4">Artifact Summary</h2>
-                <dl className="space-y-3 text-sm">
-                  <div><dt className="text-foreground/60">Course</dt><dd className="font-medium mt-0.5">AIML-500 · Machine Learning Fundamentals</dd></div>
-                  <div><dt className="text-foreground/60">Workshop</dt><dd className="font-medium mt-0.5">1 · Assignment 1.3</dd></div>
-                  <div><dt className="text-foreground/60">Subject</dt><dd className="font-medium mt-0.5">AI and ML history</dd></div>
-                  <div><dt className="text-foreground/60">Format</dt><dd className="font-medium mt-0.5">PowerPoint presentation</dd></div>
-                  <div><dt className="text-foreground/60">Coverage</dt><dd className="font-medium mt-0.5">1950–2026 · 13 slides</dd></div>
-                </dl>
-                <a href="#actual-artifact" className="mt-5 inline-flex gap-2 items-center text-sm font-medium text-accent hover:underline underline-offset-4">
-                  View artifact <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
-                </a>
-              </Card>
-            </aside>
+            <PortfolioContents />
           </div>
         </div>
       </main>
