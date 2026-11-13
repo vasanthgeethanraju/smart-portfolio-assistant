@@ -12,6 +12,7 @@ import { timelineArtifact } from "@/content/ai-ml-portfolio";
 import { portfolioArtifacts } from "@/content/portfolio-artifacts";
 import { ArtifactSection } from "@/components/portfolio/ArtifactSection";
 import { AILabArtifact } from "@/components/portfolio/AILabArtifact";
+import { AITrainingArtifact } from "@/components/portfolio/AITrainingArtifact";
 import { PortfolioContents } from "@/components/portfolio/PortfolioContents";
 
 const AIMLPortfolio = () => {
@@ -259,6 +260,7 @@ const AIMLPortfolio = () => {
                 </Card>
               </article>
               <AILabArtifact />
+              <AITrainingArtifact />
               <p className="text-sm text-foreground/70">
                 Explore how I apply my engineering skills in my{" "}
                 <Link to="/projects" className="text-accent underline underline-offset-4">personal projects</Link>.

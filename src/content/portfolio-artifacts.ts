@@ -40,4 +40,18 @@ export const portfolioArtifacts = [
     evidenceHref: "#artifact-2-actual-artifact",
     sections: sectionLabels.map(([id, label]) => ({ id: `artifact-2-${id}`, label })),
   },
+  {
+    id: "artifact-3",
+    number: 3,
+    title: "AI Training Interaction",
+    shortTitle: "AI Training Interaction",
+    assignment: "3.3",
+    workshop: "3",
+    focus: "Critical thinking & AI evaluation",
+    summary: "A four-stage ChatGPT interaction guided by my professor’s Professor Predict prompt, examining training data, hallucinations, and when AI responses need verification or external tools.",
+    format: "Word document · 3 pages",
+    coverage: "Training sources, hallucinations & task suitability",
+    evidenceHref: "#artifact-3-actual-artifact",
+    sections: sectionLabels.map(([id, label]) => ({ id: `artifact-3-${id}`, label: id === "description" ? "Description & Intended Audience" : label })),
+  },
 ];
